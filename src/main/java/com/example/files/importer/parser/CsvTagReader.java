@@ -3,6 +3,7 @@ package com.example.files.importer.parser;
 import com.example.files.importer.entity.Tag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;

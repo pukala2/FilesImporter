@@ -28,7 +28,7 @@ class TagRecordValidator {
     }
 
     private static boolean isProperSizeOfTag(CSVRecord record) {
-        final int MAX_SIZE_TAG = 50;
+        final int MAX_SIZE_TAG = 100;
         if (record.get(TAG).length() > MAX_SIZE_TAG) {
             throw new MaxSizeTagException("Size of tag is to big.");
         }

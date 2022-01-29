@@ -25,7 +25,7 @@ public class TagService {
         try {
             if (CsvHelper.hasCSVFormat(file)) {
                 int numberOfRecords = tagRepository.saveAll(csvTagReader.read(file.getInputStream())).size();
-                return new ResponseMessage("Added " + numberOfRecords + " to database.");
+                return new ResponseMessage("Added " + numberOfRecords + "tags to database.");
             }
         } catch (IOException e) {
             throw new RuntimeException("Fail to store csv data: " + e.getMessage());

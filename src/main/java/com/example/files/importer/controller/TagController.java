@@ -21,7 +21,7 @@ public class TagController {
     }
 
     @PostMapping()
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseMessage> tags(@RequestParam("file") MultipartFile file) {
         return new ResponseEntity<>(tagService.loadDataFromFileToDatabase(file), HttpStatus.OK);
     }
 }
