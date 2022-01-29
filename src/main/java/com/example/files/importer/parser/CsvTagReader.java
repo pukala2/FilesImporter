@@ -1,8 +1,10 @@
 package com.example.files.importer.parser;
 
+import com.example.files.importer.config.ConfigProperties;
 import com.example.files.importer.entity.Tag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 @Component
@@ -25,24 +28,24 @@ public class CsvTagReader implements TagReader {
     static final int MOVIE_ID = 1;
     static final int TAG = 2;
 
-    static final int MAX_NUMBER_OF_RECORDS = 15000;
-
     private final Clock clock;
+    private final ConfigProperties configProperties;
 
-    public CsvTagReader(Clock clock) {
+    public CsvTagReader(Clock clock, ConfigProperties configProperties) {
         this.clock = clock;
+        this.configProperties = configProperties;
     }
 
     @Override
     public List<Tag> read(InputStream initialStream) {
+        try (var fileReader = new BufferedReader(new InputStreamReader(initialStream,
+                configProperties.getConfigValue("encoding")))) {
 
-        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(initialStream, StandardCharsets.UTF_8))) {
-
-            var format = CSVFormat.Builder.create(CSVFormat.DEFAULT).setHeader().setSkipHeaderRecord(true)
+            var format = CSVFormat.Builder.create(CSVFormat.DEFAULT).setHeader()
                     .setIgnoreEmptyLines(true)
                     .build();
 
-            CSVParser csvParser = new CSVParser(fileReader, format);
+            var csvParser = new CSVParser(fileReader, format);
 
             return readDataFromRecords(csvParser);
         } catch (IOException e) {
@@ -52,9 +55,11 @@ public class CsvTagReader implements TagReader {
 
     private List<Tag> readDataFromRecords(CSVParser parser) throws IOException {
 
+        var maxNumberOfRecords =  parseInt(configProperties.getConfigValue("max_number_of_records"));
         var tags = new ArrayList<Tag>();
+        HeaderTagValidator.check(parser.getHeaderNames());
         for (var record : parser.getRecords()) {
-            if (TagRecordValidator.isValid(record) && tags.size() <= MAX_NUMBER_OF_RECORDS) {
+            if (TagRecordValidator.isValid(record) && tags.size() < maxNumberOfRecords) {
                 tags.add(Tag.builder()
                         .userId(parseLong(record.get(USER_ID)))
                         .movieId(parseLong(record.get(MOVIE_ID)))

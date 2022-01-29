@@ -4,7 +4,6 @@ import com.example.files.importer.entity.Tag;
 import com.example.files.importer.message.ResponseMessage;
 import com.example.files.importer.parser.TagReader;
 import com.example.files.importer.repository.TagRepository;
-import com.example.files.importer.utils.CsvHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,14 +22,12 @@ public class TagService {
 
     public ResponseMessage loadDataFromFileToDatabase(MultipartFile file) {
         try {
-            if (CsvHelper.hasCSVFormat(file)) {
-                int numberOfRecords = tagRepository.saveAll(csvTagReader.read(file.getInputStream())).size();
-                return new ResponseMessage("Added " + numberOfRecords + "tags to database.");
-            }
+            int numberOfRecords = tagRepository.saveAll(csvTagReader.read(file.getInputStream())).size();
+            return new ResponseMessage("Added " + numberOfRecords + " tags to database.");
+
         } catch (IOException e) {
             throw new RuntimeException("Fail to store csv data: " + e.getMessage());
         }
-        return new ResponseMessage("Please upload a csv file!");
     }
 
     public List<Tag> getTags() {
