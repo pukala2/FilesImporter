@@ -106,14 +106,4 @@ class CsvTagReaderTest {
             tagReader.read(new FileInputStream(path));
         });
     }
-
-//    @Test
-//    void shouldThrowTypeFileException() {
-//        Assertions.assertThrows(TypeFileException.class, () -> {
-//            var path = "src/test/resources/tags.txt";
-//            tagReader.read(new FileInputStream(path));
-//        });
-//    }
-
-
 }

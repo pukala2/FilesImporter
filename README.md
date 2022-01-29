@@ -1,4 +1,4 @@
-# FilesImporterForDatabase
+# FilesImporter
 REST service for import files to database.
 
 - Spring Boot 2.6.3
