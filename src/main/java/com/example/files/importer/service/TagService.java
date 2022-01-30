@@ -1,7 +1,7 @@
 package com.example.files.importer.service;
 
 import com.example.files.importer.entity.Tag;
-import com.example.files.importer.message.ResponseMessage;
+import com.example.files.importer.dto.ResponseMessage;
 import com.example.files.importer.parser.TagReader;
 import com.example.files.importer.repository.TagRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class TagService {
 
     public ResponseMessage loadDataFromFileToDatabase(MultipartFile file) {
         try {
-            int numberOfRecords = tagRepository.saveAll(csvTagReader.read(file.getInputStream())).size();
+            var numberOfRecords = tagRepository.saveAll(csvTagReader.read(file.getInputStream())).size();
             return new ResponseMessage("Added " + numberOfRecords + " tags to database.");
 
         } catch (IOException e) {

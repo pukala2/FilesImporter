@@ -1,4 +1,4 @@
-package com.example.files.importer.message;
+package com.example.files.importer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

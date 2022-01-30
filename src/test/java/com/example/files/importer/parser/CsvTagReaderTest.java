@@ -36,7 +36,7 @@ class CsvTagReaderTest {
     @BeforeEach
     void prepare() {
         Mockito.when(configProperties.getConfigValue("encoding")).thenReturn("UTF-8");
-        Mockito.when(configProperties.getConfigValue("max_number_of_records")).thenReturn("10");
+        Mockito.when(configProperties.getConfigValue("maxNumberOfRecords")).thenReturn("10");
     }
 
     @Test
@@ -63,7 +63,7 @@ class CsvTagReaderTest {
                 Tag.builder().userId(2L).movieId(60756L).tag("funny").timestamp(Timestamp.from(instantNow)).build(),
                 Tag.builder().userId(2L).movieId(60756L).tag("Highly quotable").timestamp(Timestamp.from(instantNow)).build());
 
-        Mockito.when(configProperties.getConfigValue("max_number_of_records")).thenReturn("2");
+        Mockito.when(configProperties.getConfigValue("maxNumberOfRecords")).thenReturn("2");
         Mockito.when(clock.instant()).thenReturn(instantNow, instantNow, instantNow, instantNow);
 
         var path = "src/test/resources/tags_short.csv";

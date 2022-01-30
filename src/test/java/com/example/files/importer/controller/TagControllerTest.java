@@ -33,9 +33,6 @@ class TagControllerTest {
     @Autowired
     private TagRepository tagRepository;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
@@ -43,25 +40,16 @@ class TagControllerTest {
         tagRepository.deleteAll();
     }
 
-    private MultipartFile createMultipartFile(String path) throws IOException {
-        var file = new File(path);
-        var fileInputStream = new FileInputStream(file);
-        var mockMultipartFile = new MockMultipartFile(
-                "upload.csv", file.getName(), "multipart/form-data", fileInputStream);
-        mockMultipartFile.getOriginalFilename().replace(mockMultipartFile.getOriginalFilename(), "tags.csv");
-        return mockMultipartFile;
-    }
-
     @Test
     void shouldSaveTagsFromFile() throws Exception {
         var path = "src/test/resources/tags.csv";
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/tags")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/tag")
                         .file("file", createMultipartFile(path).getBytes())
                         .characterEncoding("UTF-8"))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
-        var mvcResult = mockMvc.perform(get("/tags"))
+        var mvcResult = mockMvc.perform(get("/tag"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -75,9 +63,18 @@ class TagControllerTest {
     void shouldGiveMaxSizeTagException() throws Exception {
         var path = "src/test/resources/tags_latest.csv";
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/tags")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/tag")
                         .file("file", createMultipartFile(path).getBytes())
                         .characterEncoding("UTF-8"))
-                .andExpect(status().isLengthRequired());
+                .andExpect(status().isBadRequest());
+    }
+
+    private MultipartFile createMultipartFile(String path) throws IOException {
+        var file = new File(path);
+        var fileInputStream = new FileInputStream(file);
+        var mockMultipartFile = new MockMultipartFile(
+                "upload.csv", file.getName(), "multipart/form-data", fileInputStream);
+        mockMultipartFile.getOriginalFilename().replace(mockMultipartFile.getOriginalFilename(), "tags.csv");
+        return mockMultipartFile;
     }
 }

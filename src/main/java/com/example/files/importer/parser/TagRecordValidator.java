@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 class TagRecordValidator {
     static boolean isValid(CSVRecord record) {
-        return !isSomeValueBlank(record) && isIdNumeric(record) && isProperSizeOfTag(record);
+        return !isSomeValueBlank(record) && isIdNumeric(record) && checkTagSize(record);
     }
 
     private static boolean isSomeValueBlank(CSVRecord record) {
@@ -27,9 +27,9 @@ class TagRecordValidator {
         return true;
     }
 
-    private static boolean isProperSizeOfTag(CSVRecord record) {
-        final int MAX_SIZE_TAG = 100;
-        if (record.get(TAG).length() > MAX_SIZE_TAG) {
+    private static boolean checkTagSize(CSVRecord record) {
+        final var maxSizeTag = 100;
+        if (record.get(TAG).length() > maxSizeTag) {
             throw new MaxSizeTagException("Size of tag = '" + record.get(TAG) + "' is to big.");
         }
         return true;

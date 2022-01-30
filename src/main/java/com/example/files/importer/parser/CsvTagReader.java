@@ -4,15 +4,12 @@ import com.example.files.importer.config.ConfigProperties;
 import com.example.files.importer.entity.Tag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.util.ArrayList;
@@ -55,7 +52,7 @@ public class CsvTagReader implements TagReader {
 
     private List<Tag> readDataFromRecords(CSVParser parser) throws IOException {
 
-        var maxNumberOfRecords =  parseInt(configProperties.getConfigValue("max_number_of_records"));
+        var maxNumberOfRecords =  parseInt(configProperties.getConfigValue("maxNumberOfRecords"));
         var tags = new ArrayList<Tag>();
         HeaderTagValidator.check(parser.getHeaderNames());
         for (var record : parser.getRecords()) {
